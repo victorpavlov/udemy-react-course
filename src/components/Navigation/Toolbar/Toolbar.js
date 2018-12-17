@@ -1,12 +1,21 @@
 import React from 'react';
-import Logo from './../../Logo/Logo'
-import classes from './Toolbar.module.css';
+import Logo from './../../Logo/Logo';
+import NavigationItems from './../NavigationItems/NavigationItems';
+import Button from './../../UI/Button/Button';
+
+import classes from './Toolbar.module.scss';
 
 const toolbar = (props) => (
   <header className={classes.Toolbar}>
-    <div>Menu</div>
+    <span className={classes.Toolbar__NavToggle}>
+      <Button clicked={props.toggleClicked}>
+        ☰
+      </Button>
+    </span>
     <Logo parentClass={classes.Toolbar__Logo} />
-    <nav>...</nav>
+    <nav className={classes.Toolbar__Nav}>
+      <NavigationItems />
+    </nav>
   </header>
 );
 

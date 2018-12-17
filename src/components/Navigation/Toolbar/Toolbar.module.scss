@@ -22,3 +22,22 @@
   margin: 10% 0;
   height: 80%;
 }
+
+.Toolbar__Nav {
+  display: none;
+
+  @media(min-width: 500px) {
+    display: block;
+  }
+}
+
+.Toolbar__NavToggle {
+  @media(min-width: 500px) {
+    display: none;
+  }
+  
+  button {
+    margin: 0 !important;
+    padding: 10px !important;
+  }
+}
