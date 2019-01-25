@@ -10,7 +10,7 @@ const burger = (props) => {
           return <BurgerIngredient key={ingKey + i} type={ingKey}/>;
         });
     })
-    .reduce((arr, el) => {
+    .reduceRight((arr, el) => {
       return arr.concat(el);
     }, []);
   if (transformedIngredients.length === 0) {
