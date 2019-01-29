@@ -25,16 +25,15 @@
     width: auto;
     color: #fff;
   }
-}
 
-.NavigationItem__link:hover,
-.NavigationItem__link:active,
-.NavigationItem__link.active {
-  background: #8f5c2c;
-  border-bottom-color: #40a4c8;
-  color: #000;
+  &:hover,
+  &.active {
+    background: #8f5c2c;
+    border-bottom-color: #40a4c8;
+    color: #000;
 
-  @media(min-width: 500px) {
-    color: #fff;
+    @media(min-width: 500px) {
+      color: #fff;
+    }
   }
 }
