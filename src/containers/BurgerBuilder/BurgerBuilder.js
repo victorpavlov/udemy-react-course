@@ -10,31 +10,22 @@ import Spinner from './../../components/UI/Spinner/Spinner';
 import withErrorHandler from './../../hoc/withErrorHandler/withErrorHandler';
 import axios from './../../axios-orders';
 
-const INGREDIENT_PRICES = {
-  salad: 0.5,
-  bacon: 0.4,
-  cheese: 0.3,
-  meat: 1
-}
-
 class BurgerBuilder extends React.Component {
   state = {
-    totalPrice: 0,
-    purchasable: false,
     purchasing: false,
     loading: false,
     error: false
   }
 
-  componentDidMount() {
-    // axios.get('https://udemy-react-cours.firebaseio.com/ingredients.json')
-    //   .then(response => {
-    //     this.setState({ingredients: response.data});
-    //   })
-    //   .catch(error => {
-    //     this.setState({error: true})
-    //   });
-  }
+  // componentDidMount() {
+  //   axios.get('https://udemy-react-cours.firebaseio.com/ingredients.json')
+  //     .then(response => {
+  //       this.setState({ingredients: response.data});
+  //     })
+  //     .catch(error => {
+  //       this.setState({error: true})
+  //     });
+  // }
 
   updatePurchaseState(ingredients) {
     const sum = Object.keys(ingredients)
@@ -47,48 +38,7 @@ class BurgerBuilder extends React.Component {
       return sum + el;
     }, 0);
 
-    this.setState({purchasable: sum > 0});
-  }
-
-  addIngredientHandler = (type) => {
-    const oldCount =  this.props.ings[type];
-    const updatedCount = oldCount + 1;
-    const updatedIngredients = {
-      ...this.props.ings
-    }
-    updatedIngredients[type] = updatedCount;
-    const priceAddition = INGREDIENT_PRICES[type];
-    const oldPrice = this.state.totalPrice;
-    const newPrice = oldPrice + priceAddition;
-    
-    this.setState({
-      totalPrice: newPrice,
-      ingredients: updatedIngredients
-    });
-
-    this.updatePurchaseState(updatedIngredients);
-  }
-
-  removeIngredientHandler = (type) => {
-    const oldCount =  this.props.ings[type];
-    if (oldCount <= 0) {
-      return;
-    }
-    const updatedCount = oldCount - 1;
-    const updatedIngredients = {
-      ...this.props.ings
-    }
-    updatedIngredients[type] = updatedCount;
-    const priceReduction = INGREDIENT_PRICES[type];
-    const oldPrice = this.state.totalPrice;
-    const newPrice = oldPrice - priceReduction;
-    
-    this.setState({
-      totalPrice: newPrice,
-      ingredients: updatedIngredients
-    });
-
-    this.updatePurchaseState(updatedIngredients);
+    return sum > 0;
   }
 
   purchaseHandler = () => {
@@ -100,17 +50,7 @@ class BurgerBuilder extends React.Component {
   }
 
   purchaseContinueHandler = () => {
-    const queryParams = [];
-    for (let i in this.props.ings) {
-      const param = `${encodeURIComponent(i)}=${encodeURIComponent(this.props.ings[i])}`;
-      queryParams.push(param);
-    }
-    queryParams.push('price=' + this.state.totalPrice);
-    const queryString = queryParams.join('&');
-    this.props.history.push({
-      pathname: '/checkout',
-      search: `?${queryString}`
-    });
+    this.props.history.push('/checkout');
   }
 
   render() {
@@ -132,9 +72,9 @@ class BurgerBuilder extends React.Component {
             ingredientAdded={this.props.onIngredientAdded}
             ingredientRemoved={this.props.onIngredientDeleted}
             disabled={disabledInfo}
-            purchasable={this.state.purchasable}
+            purchasable={this.updatePurchaseState(this.props.ings)}
             ordered={this.purchaseHandler}
-            price={this.state.totalPrice} />
+            price={this.props.totalPrice} />
         </>
         
       );
@@ -143,7 +83,7 @@ class BurgerBuilder extends React.Component {
           ingredients={this.props.ings}
           btnCancel={this.purchaseCancelHandler}
           btnContinue={this.purchaseContinueHandler}
-          price={this.state.totalPrice} />
+          price={this.props.totalPrice} />
       );
     }
 
@@ -164,7 +104,8 @@ class BurgerBuilder extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    ings: state.ingredients
+    ings: state.ingredients,
+    totalPrice: state.totalPrice
   };
 }
 
