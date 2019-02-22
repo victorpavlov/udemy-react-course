@@ -49,8 +49,9 @@ export const auth = (email, password, isSignUp) => {
     if (!isSignUp) {
       url = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=';
     }
-    axios.post(url + 'AIzaSyDiTmIddSeT0X43gRR7MR9TX1CPq7mqCLU', authData)
+    axios.post(url + process.env.REACT_APP_FB_KEY, authData)
       .then(response => {
+        localStorage.setItem('token', response.data.idToken);
         dispatch(authSuccess(response.data.idToken, response.data.localId));
         dispatch(checkAuthTimeout(response.data.expiresIn));
       })
